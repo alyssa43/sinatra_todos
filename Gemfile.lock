@@ -3,6 +3,7 @@ GEM
   specs:
     base64 (0.2.0)
     erubi (1.13.1)
+    htmlbeautifier (1.4.3)
     logger (1.6.5)
     multi_json (1.15.0)
     mustermann (3.0.3)
@@ -43,6 +44,7 @@ PLATFORMS
 
 DEPENDENCIES
   erubi
+  htmlbeautifier
   puma (~> 6.6)
   rackup (~> 2.2)
   sinatra
