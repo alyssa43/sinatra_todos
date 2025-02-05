@@ -130,7 +130,7 @@ end
 post '/lists/:list_id/todos/:todo_id/delete' do
   list_id = params[:list_id].to_i
   list = session[:lists][list_id]
-  
+
   todo_id = params[:todo_id].to_i
   list[:todos].delete_at(todo_id)
   session[:success] = "The todo has been deleted."
@@ -138,11 +138,13 @@ post '/lists/:list_id/todos/:todo_id/delete' do
 end
 
 
-# GET   /               => redirects to /lists
-# GET   /lists          => view all lists
-# GET   / lists/new     => new list form
-# POST  /lists          => create new list
-# GET   /lists/1        => view a single list
-# GET   /lists/1/edit   => edit an existing list
-# POST  /lists/1        => update an existing list
-# POST  /lists/1/delete => delete a todo list
+# GET   /                       => redirects to /lists
+# GET   /lists                  => view all lists
+# GET   /lists/new              => new list form
+# POST  /lists                  => create new list
+# GET   /lists/1                => view a single list
+# GET   /lists/1/edit           => edit an existing list
+# POST  /lists/1                => update an existing list
+# POST  /lists/1/delete         => delete a todo list
+# POST  /lists/1/todos          => add a new todo to a list
+# POST  /lists/1/todos/0/delete => delete a todo from a list
