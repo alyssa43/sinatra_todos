@@ -149,6 +149,19 @@ post '/lists/:list_id/todos/:todo_id' do
   redirect "/lists/#{list_id}"
 end
 
+# Mark all todos as complete on a list
+post '/lists/:list_id/complete_all' do
+  list_id = params[:list_id].to_i
+  list = session[:lists][list_id]
+
+  list[:todos].each do |todo_hsh|
+    todo_hsh[:completed] = true
+  end
+
+  session[:success] = 'All todos have been completed.'
+  redirect "/lists/#{list_id}"
+end
+
 # GET   /                       => redirects to /lists
 # GET   /lists                  => view all lists
 # GET   /lists/new              => new list form
@@ -159,3 +172,5 @@ end
 # POST  /lists/1/delete         => delete a todo list
 # POST  /lists/1/todos          => add a new todo to a list
 # POST  /lists/1/todos/0/delete => delete a todo from a list
+# POST  /lists/1/todos/0        => update status of a todo on a list
+# POST  /lists/1/complete_all   => mark all todos as complete on a list
