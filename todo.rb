@@ -10,6 +10,27 @@ configure do
   set :session_secret, SecureRandom.hex(32)
 end
 
+helpers do
+  # Return number of total todos on a list
+  def total_todos_count(list)
+    list[:todos].size
+  end
+
+  # Return number of completed todos on a list
+  def completed_todos_count(list)
+    list[:todos].count { |todo| todo[:completed] == true }
+  end
+
+  # Returns true if a lists todos are all completed and non empty
+  def non_empty_completed_list?(list)
+    total_todos_count(list).positive? && completed_todos_count(list) == total_todos_count(list)
+  end
+
+  def list_class(list)
+    'complete' if non_empty_completed_list?(list)
+  end
+end
+
 before do
   session[:lists] ||= []
 end
