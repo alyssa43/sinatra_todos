@@ -9,5 +9,8 @@ gem 'sinatra-contrib'
 gem 'webrick'
 
 ruby '3.2.2'
-gem 'puma', '~> 6.6'
 gem 'rackup', '~> 2.2'
+
+group :production do
+  gem 'puma'
+end

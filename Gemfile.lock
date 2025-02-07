@@ -45,7 +45,7 @@ PLATFORMS
 DEPENDENCIES
   erubi
   htmlbeautifier
-  puma (~> 6.6)
+  puma
   rackup (~> 2.2)
   sinatra
   sinatra-contrib
