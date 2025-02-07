@@ -12,7 +12,7 @@
   </header>
 
   <ul>
-    <% @list[:todos].each_with_index do |todo_hsh, index| %>
+    <% sort_todos(@list[:todos]) do |todo_hsh, index| %>
       <% if todo_hsh[:completed] %>
         <li class="complete">
       <% else %>

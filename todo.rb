@@ -29,6 +29,20 @@ helpers do
   def list_class(list)
     'complete' if non_empty_completed_list?(list)
   end
+
+  def sort_lists(lists, &block)
+    complete_lists, incomplete_lists = lists.partition { |list| non_empty_completed_list?(list) }
+
+    incomplete_lists.each { |list| yield list, lists.index(list) }
+    complete_lists.each { |list| yield list, lists.index(list) }
+  end
+
+  def sort_todos(todos, &block)
+    complete_todos, incomplete_todos = todos.partition { |todo| todo[:completed] }
+
+    incomplete_todos.each { |todo| yield todo, todos.index(todo) }
+    complete_todos.each { |todo| yield todo, todos.index(todo) }
+  end
 end
 
 before do
@@ -55,7 +69,6 @@ end
 # View list of lists
 get '/lists' do
   @lists = session[:lists]
-
   erb :lists, layout: :layout
 end
 
@@ -83,6 +96,8 @@ end
 get '/lists/:list_id' do
   @list_id = params[:list_id].to_i
   @list = session[:lists][@list_id]
+
+p sort_todos!(@list)
 
   if @list.nil?
     session[:error] = 'The specified list does not exist.'
