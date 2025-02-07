@@ -30,14 +30,14 @@ helpers do
     'complete' if non_empty_completed_list?(list)
   end
 
-  def sort_lists(lists, &block)
+  def sort_lists(lists)
     complete_lists, incomplete_lists = lists.partition { |list| non_empty_completed_list?(list) }
 
     incomplete_lists.each { |list| yield list, lists.index(list) }
     complete_lists.each { |list| yield list, lists.index(list) }
   end
 
-  def sort_todos(todos, &block)
+  def sort_todos(todos)
     complete_todos, incomplete_todos = todos.partition { |todo| todo[:completed] }
 
     incomplete_todos.each { |todo| yield todo, todos.index(todo) }
@@ -96,8 +96,6 @@ end
 get '/lists/:list_id' do
   @list_id = params[:list_id].to_i
   @list = session[:lists][@list_id]
-
-p sort_todos!(@list)
 
   if @list.nil?
     session[:error] = 'The specified list does not exist.'
