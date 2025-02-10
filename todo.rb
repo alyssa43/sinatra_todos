@@ -11,7 +11,7 @@ configure do
 end
 
 configure do
-  set :erb, :escape_html => true
+  set :erb, escape_html: true
 end
 
 helpers do
@@ -70,6 +70,15 @@ def error_for_todo_item(item)
   return 'The todo must be between 1 and 100 characters.' unless (1..100).cover? item.size
 end
 
+def load_list(list)
+  if list.nil?
+    session[:error] = 'The specified list does not exist.'
+    redirect '/lists'
+  else
+    list
+  end
+end
+
 get '/' do
   redirect '/lists'
 end
@@ -103,34 +112,24 @@ end
 # Shows Todo lists name and any todos on that list
 get '/lists/:list_id' do
   @list_id = params[:list_id].to_i
-  @list = session[:lists][@list_id]
+  @list = load_list(session[:lists][@list_id])
 
-  if @list.nil?
-    session[:error] = 'The specified list does not exist.'
-    redirect '/lists'
-  else
-    erb :todos, layout: :layout
-  end
+  erb :todos, layout: :layout
 end
 
 # Edit an existing todo list
 get '/lists/:list_id/edit' do
   @list_id = params[:list_id].to_i
-  @list = session[:lists][@list_id]
+  @list = load_list(session[:lists][@list_id])
 
-  if @list.nil?
-    session[:error] = 'The specified list does not exist.'
-    redirect '/lists'
-  else
-    erb :edit_list, layout: :layout
-  end
+  erb :edit_list, layout: :layout
 end
 
 # Update an existing todo list
 post '/lists/:list_id' do
   list_name = params[:list_name].strip
   @list_id = params[:list_id].to_i
-  @list = session[:lists][@list_id]
+  @list = load_list(session[:lists][@list_id])
 
   error = error_for_list_name(list_name)
   if error
@@ -155,7 +154,7 @@ end
 post '/lists/:list_id/todos' do
   todo_item = params[:todo].strip
   @list_id = params[:list_id].to_i
-  @list = session[:lists][@list_id]
+  @list = load_list(session[:lists][@list_id])
 
   error = error_for_todo_item(todo_item)
   if error
@@ -171,7 +170,7 @@ end
 # Delete a todo from a list
 post '/lists/:list_id/todos/:todo_id/delete' do
   list_id = params[:list_id].to_i
-  list = session[:lists][list_id]
+  list = load_list(session[:lists][list_id])
 
   todo_id = params[:todo_id].to_i
   list[:todos].delete_at(todo_id)
@@ -182,7 +181,7 @@ end
 # Update status of a todo on a list
 post '/lists/:list_id/todos/:todo_id' do
   list_id = params[:list_id].to_i
-  list = session[:lists][list_id]
+  list = load_list(session[:lists][list_id])
   todo_id = params[:todo_id].to_i
   todo = list[:todos][todo_id]
 
@@ -194,7 +193,7 @@ end
 # Mark all todos as complete on a list
 post '/lists/:list_id/complete_all' do
   list_id = params[:list_id].to_i
-  list = session[:lists][list_id]
+  list = load_list(session[:lists][list_id])
 
   list[:todos].each do |todo_hsh|
     todo_hsh[:completed] = true
@@ -203,16 +202,3 @@ post '/lists/:list_id/complete_all' do
   session[:success] = 'All todos have been completed.'
   redirect "/lists/#{list_id}"
 end
-
-# GET   /                       => redirects to /lists
-# GET   /lists                  => view all lists
-# GET   /lists/new              => new list form
-# POST  /lists                  => create new list
-# GET   /lists/1                => view a single list
-# GET   /lists/1/edit           => edit an existing list
-# POST  /lists/1                => update an existing list
-# POST  /lists/1/delete         => delete a todo list
-# POST  /lists/1/todos          => add a new todo to a list
-# POST  /lists/1/todos/0/delete => delete a todo from a list
-# POST  /lists/1/todos/0        => update status of a todo on a list
-# POST  /lists/1/complete_all   => mark all todos as complete on a list
