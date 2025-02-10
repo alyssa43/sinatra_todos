@@ -43,6 +43,10 @@ helpers do
     incomplete_todos.each { |todo| yield todo, todos.index(todo) }
     complete_todos.each { |todo| yield todo, todos.index(todo) }
   end
+
+  def h(content)
+    Rack::Utils.escape_html(content)
+  end
 end
 
 before do

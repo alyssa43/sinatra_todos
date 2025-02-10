@@ -22,7 +22,7 @@
           <input type="hidden" name="completed" value="<%= !todo_hsh[:completed] %>" />
           <button type="submit">Complete</button>
         </form>
-        <h3><%= todo_hsh[:name] %></h3>
+        <h3><%=h todo_hsh[:name] %></h3>
         <form action="/lists/<%= @list_id %>/todos/<%= index %>/delete" method="post" class="delete">
           <button type="submit">Delete</button>
         </form>
