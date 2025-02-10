@@ -8,7 +8,10 @@ require 'tilt/erubi'
 configure do
   enable :sessions
   set :session_secret, SecureRandom.hex(32)
-  set :erb, :escaping_html => true
+end
+
+configure do
+  set :erb, :escape_html => true
 end
 
 helpers do
