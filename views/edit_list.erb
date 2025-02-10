@@ -4,7 +4,7 @@
 
 <section id="todos">
   <header>
-    <h2>Editing "<%=h @list[:name] %>"</h2>
+    <h2>Editing "<%= @list[:name] %>"</h2>
     <ul>
       <li>
       <form action="/lists/<%= @list_id %>/delete" method="post">
